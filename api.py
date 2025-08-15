@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import backend
 
 app = Flask(__name__)
+CORS(app)  # Allow all domains to access API
 
 @app.route("/leave_balance", methods=["GET"])
 def leave_balance():
@@ -23,4 +25,4 @@ def apply_leave():
 
 if __name__ == "__main__":
     backend.init_db()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)  # Host must be 0.0.0.0 for Render
