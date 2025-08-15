@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Application System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f2f7ff;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: auto;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background: #eef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leave Application System</h1>
+    <div class="container">
+        <h3>Check Leave Balance</h3>
+        <input type="text" id="checkName" placeholder="Enter your name">
+        <button onclick="checkBalance()">Check Balance</button>
+
+        <h3>Apply for Leave</h3>
+        <input type="text" id="applyName" placeholder="Enter your name">
+        <input type="number" id="days" placeholder="Number of days">
+        <button onclick="applyLeave()">Apply Leave</button>
+
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        const BASE_URL = "http://127.0.0.1:5000";
+
+        function checkBalance() {
+            const name = document.getElementById("checkName").value;
+            fetch(`${BASE_URL}/leave_balance?name=${name}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+                });
+        }
+
+        function applyLeave() {
+            const name = document.getElementById("applyName").value;
+            const days = parseInt(document.getElementById("days").value);
+            fetch(`${BASE_URL}/apply_leave`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, days })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+            });
+        }
+    </script>
+</body>
+</html>
